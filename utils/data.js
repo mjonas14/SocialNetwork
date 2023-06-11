@@ -1,3 +1,5 @@
+/*******************************************************/
+// User Data
 const username = [
     'John Highland',
     'Jane Smith',
@@ -22,5 +24,44 @@ const getEmail = (n) => {
     return email[n];
 };
 
-module.exports = { getName, getEmail };
+/*******************************************************/
+//  Thoughts Data
+
+const thoughts = [
+    'I love to code',
+    'I love to eat',
+    'This is mad',
+    'I love to sleep',
+    'I love to play football'
+];
+
+const thoughtUsername = [
+    'Manny',
+    'Moe',
+    'Margerie',
+    'Melissa',
+    'Molly',
+];
+
+const reactions = [
+    'This is great',
+    'This is awesome',
+    'Wow',
+    'Oh snap', 
+    'Noice',
+];
+
+const getThought = (n) => {
+    return thoughts[n];
+};
+
+const getThoughtUsername = (n) => {
+    return thoughtUsername[n];
+};
+
+const getReaction = (n) => {
+    return reactions[n];
+};
+
+module.exports = { getName, getEmail, getThought, getThoughtUsername, getReaction };
 
