@@ -1,52 +1,62 @@
-const connection = require('../config/connection');
-const { User, Thought } = require('../models');
-const { getName, getEmail, getThought, getThoughtUsername, getReaction } = require('./data');
+const connection = require("../config/connection");
+const { User, Thought } = require("../models");
+const {
+  getName,
+  getEmail,
+  getThought,
+  getThoughtUsername,
+  getReaction,
+} = require("./data");
 
-connection.on('error', (err) => err);
+connection.on("error", (err) => err);
 
-connection.once('open', async () => {
-    console.log('Successfully connected to database');
+connection.once("open", async () => {
+  console.log("Successfully connected to database");
 
-    // Drop existing users
-    await User.deleteMany({});
-    await Thought.deleteMany({});
-    console.log('Database cleared');
+  // Drop existing users
+  await User.deleteMany({});
+  await Thought.deleteMany({});
+  console.log("Database cleared");
 
+  const userList = [];
+  const thoughtList = [];
 
-    const userList = [];
-    const thoughtList = [];
+  // User
+  for (let i = 0; i < 5; i++) {
+    const username = getName(i);
+    const email = getEmail(i);
 
-    // User
-    for (let i = 0; i < 5; i++) {
-        const username = getName(i);
-        const email = getEmail(i);
+    userList.push({ username, email });
+  }
 
-        userList.push({ username, email });
-    }
+  // Thought
+  for (let i = 0; i < 5; i++) {
+    const thoughtText = getThought(i);
+    const username = getThoughtUsername(i);
+    const reactions = getReaction(i);
+    console.log(reactions);
+    const reactionBody = {
+        reactionBody: reactions, 
+        username: username,
+    };
 
-    // Thought
-    for (let i = 0; i < 5; i++) {
-        const thoughtText = getThought(i);
-        const username = getThoughtUsername(i);
-        const reactions = getReaction(i);
+    thoughtList.push({ thoughtText, username, reactionBody });
+    console.log(thoughtList);
+  }
 
-        thoughtList.push({ thoughtText, username, reactions });
-    }
+  await Thought.collection.insertMany(thoughtList);
 
-    await Thought.collection.insertOne(
-        {
-            thoughtText: 'This is complete and utter craziness, but I love it',
-            username: 'Manny',
-            
-        }
-        );
-        await User.collection.insertMany(userList);
-        
-    console.table(userList);
-    console.table(thoughtList);
-    console.info('Seeding complete! 🌱');
-    process.exit(0);
+  // await Thought.collection.insertOne(
+  //     {
+  //         thoughtText: 'This is complete and utter craziness, but I love it',
+  //         username: 'Manny',
+
+  //     }
+  //     );
+  await User.collection.insertMany(userList);
+
+  console.table(userList);
+  console.table(thoughtList);
+  console.info("Seeding complete! 🌱");
+  process.exit(0);
 });
-
-
-
